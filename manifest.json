@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "GT Clean View",
+  "version": "1.0.0",
+  "description": "Hides certain game graphics",
+  "content_scripts": [
+    {
+      "matches": ["https://g2.galactictycoons.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
