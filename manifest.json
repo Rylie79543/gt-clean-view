@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "GT Clean View",
+  "name": "GT Discreet Mode",
   "version": "1.0.0",
-  "description": "Hides certain game graphics",
+  "description": "Provides a more discreet interface for Galactic Tycoons by hiding selected game-related graphics.",
   "content_scripts": [
     {
       "matches": ["https://g2.galactictycoons.com/*"],

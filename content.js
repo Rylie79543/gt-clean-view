@@ -14,6 +14,7 @@
         );
 
         updateToggleButton();
+        updateSpriteIcons();
     }
 
     function injectStyles() {
@@ -26,8 +27,7 @@
         style.id = 'gt-sfw-styles';
 
         style.textContent = `
-            html.gt-sfw-enabled use[href*="/sprite-"][href*="#"],
-            html.gt-sfw-enabled use[xlink\\:href*="/sprite-"][xlink\\:href*="#"] {
+            html.gt-sfw-enabled svg.gt-sfw-hidden {
                 display: none !important;
             }
 
@@ -56,6 +56,33 @@
         document.head.appendChild(style);
     }
 
+    function updateSpriteIcons() {
+        const uses = document.querySelectorAll('use');
+
+        uses.forEach(use => {
+            const href =
+                use.getAttribute('href') ||
+                use.getAttribute('xlink:href') ||
+                use.getAttributeNS(
+                    'http://www.w3.org/1999/xlink',
+                    'href'
+                );
+
+            const svg = use.closest('svg');
+
+            if (!svg) {
+                return;
+            }
+
+            if (href && /\/sprite-[^#]+\.svg#/i.test(href)) {
+                svg.classList.toggle(
+                    'gt-sfw-hidden',
+                    isSfwEnabled()
+                );
+            }
+        });
+    }
+
     function createToggle() {
         if (document.getElementById('gt-sfw-toggle')) {
             return;
@@ -81,21 +108,24 @@
         });
 
         wrapper.appendChild(button);
+
         navbar.appendChild(wrapper);
 
         updateToggleButton();
     }
 
     function updateToggleButton() {
-        const button = document.querySelector('#gt-sfw-toggle button');
+        const button = document.querySelector(
+            '#gt-sfw-toggle button'
+        );
 
         if (!button) {
             return;
         }
 
         button.textContent = isSfwEnabled()
-            ? 'SFW: ON'
-            : 'SFW: OFF';
+            ? 'Clean: ON'
+            : 'Clean: OFF';
     }
 
     function init() {
@@ -107,12 +137,14 @@
         );
 
         createToggle();
+        updateSpriteIcons();
     }
 
     init();
 
     const observer = new MutationObserver(() => {
         createToggle();
+        updateSpriteIcons();
     });
 
     observer.observe(document.body, {
